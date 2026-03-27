@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "955476813141",
+    "project_id": "mediworld-58f45",
+    "storage_bucket": "mediworld-58f45.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955476813141:android:efbd5b404e23c05e26bbdc",
+        "android_client_info": {
+          "package_name": "newlife.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDykR4z84-wn46xV3h7SjPnnWXpkJr2zaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

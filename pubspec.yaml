@@ -1,0 +1,42 @@
+name: pregnancy_care_app
+description: Production-ready Flutter healthcare app for pregnant women with Firebase and AI support.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.41.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  firebase_core: ^4.2.1
+  firebase_auth: ^6.1.1
+  cloud_firestore: ^6.0.1
+  http: ^1.5.0
+  provider: ^6.1.5+1
+  path_provider: ^2.1.5
+  intl: ^0.20.2
+  pedometer: ^4.2.0
+  permission_handler: ^12.0.1
+  speech_to_text: ^7.3.0
+  flutter_tts: ^4.2.5
+  flutter_local_notifications: ^21.0.0
+  timezone: ^0.11.0
+  flutter_timezone: ^5.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"
