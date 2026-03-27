@@ -23,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    if (!mounted) {
+      return;
+    }
     setState(() => _isLoading = true);
     try {
       await context.read<AuthService>().signIn(

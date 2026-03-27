@@ -52,6 +52,7 @@ class FirestoreService {
         'uid': uid,
         'email': user.email,
         'profileUpdatedAt': now,
+        ...profile,
       }, SetOptions(merge: true));
       await _profileRef(uid).set(profile, SetOptions(merge: true));
     });
@@ -412,8 +413,12 @@ class FirestoreService {
 
   String _mapFirebaseError(FirebaseException error) {
     switch (error.code) {
+      case 'unauthenticated':
+        return 'Please sign in again and try saving your data.';
       case 'permission-denied':
         return 'You do not have permission to update this record.';
+      case 'failed-precondition':
+        return 'Firestore is not fully configured yet. Check that Firestore Database is enabled in Firebase.';
       case 'unavailable':
       case 'deadline-exceeded':
         return 'Firestore is offline right now. Please check your internet connection and try again.';

@@ -16,7 +16,11 @@ import 'services/notification_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final notificationService = NotificationService();
-  await notificationService.initialize();
+  try {
+    await notificationService.initialize();
+  } catch (error) {
+    debugPrint('Notification initialization failed: $error');
+  }
 
   String? firebaseInitializationError;
   try {
@@ -62,6 +66,11 @@ class PregnancyCareApp extends StatelessWidget {
         title: 'Pregnancy Care',
         debugShowCheckedModeBanner: false,
         theme: _buildTheme(),
+        builder: (context, child) {
+          ErrorWidget.builder = (details) =>
+              _AppErrorScreen(message: details.exceptionAsString());
+          return child ?? const SizedBox.shrink();
+        },
         home: firebaseInitializationError == null
             ? const _AppRoot()
             : _FirebaseSetupScreen(error: firebaseInitializationError!),
@@ -155,6 +164,9 @@ class _AppRoot extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: authService.authStateChanges,
       builder: (context, authSnapshot) {
+        if (authSnapshot.hasError) {
+          return _AppErrorScreen(message: authSnapshot.error.toString());
+        }
         if (authSnapshot.connectionState == ConnectionState.waiting) {
           return const _LoadingScreen(
             message: 'Checking your secure session...',
@@ -170,6 +182,9 @@ class _AppRoot extends StatelessWidget {
         return StreamBuilder<UserModel?>(
           stream: firestoreService.watchUserProfile(user.uid),
           builder: (context, profileSnapshot) {
+            if (profileSnapshot.hasError) {
+              return _AppErrorScreen(message: profileSnapshot.error.toString());
+            }
             if (profileSnapshot.connectionState == ConnectionState.waiting) {
               return const _LoadingScreen(
                 message: 'Loading your care dashboard...',
@@ -192,6 +207,49 @@ class _AppRoot extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _AppErrorScreen extends StatelessWidget {
+  const _AppErrorScreen({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(Icons.error_outline_rounded, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Something went wrong',
+                    style: theme.textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    message,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

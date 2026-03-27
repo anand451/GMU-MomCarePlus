@@ -24,6 +24,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    if (!mounted) {
+      return;
+    }
     setState(() => _isLoading = true);
     try {
       await context.read<AuthService>().register(

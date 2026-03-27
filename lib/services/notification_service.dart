@@ -18,21 +18,26 @@ class NotificationService {
       return;
     }
 
-    tz_data.initializeTimeZones();
-    await _configureLocalTimezone();
+    try {
+      tz_data.initializeTimeZones();
+      await _configureLocalTimezone();
 
-    const initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings('ic_launcher'),
-      iOS: DarwinInitializationSettings(
-        requestAlertPermission: false,
-        requestBadgePermission: false,
-        requestSoundPermission: false,
-      ),
-    );
+      const initializationSettings = InitializationSettings(
+        android: AndroidInitializationSettings('ic_launcher'),
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        ),
+      );
 
-    await _plugin.initialize(settings: initializationSettings);
-    _isInitialized = true;
-    debugPrint('NotificationService initialized');
+      await _plugin.initialize(settings: initializationSettings);
+      _isInitialized = true;
+      debugPrint('NotificationService initialized');
+    } catch (error) {
+      debugPrint('NotificationService initialize error: $error');
+      rethrow;
+    }
   }
 
   Future<void> requestPermissions() async {
